@@ -2,7 +2,7 @@
 from fastapi import FastAPI
 import pika
 
-from configurations.config import RABBITMQ_URL
+from riderapp.configurations.config import RABBITMQ_URL
 '''
 params = pika.URLParameters(RABBITMQ_URL)
 connection = pika.BlockingConnection(params)
