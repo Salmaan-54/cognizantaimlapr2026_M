@@ -46,7 +46,7 @@ def linear_regression_model():
     predicted_price = model.predict(new_X)
     print(f'Predicted Price for new data: {predicted_price[0]}')
 
-    '''
+    
     # For multiple regression, plot actual vs predicted values
     plt.scatter(y_test, y_pred, color='blue', label='Predictions', alpha=0.6)
     plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], color='red', linestyle='--', label='Perfect Fit')
@@ -55,7 +55,7 @@ def linear_regression_model():
     plt.title('Multiple Linear Regression: Actual vs Predicted Price')
     plt.legend()
     plt.show()
-    '''
+    
     return model
 
 if __name__ == "__main__":
