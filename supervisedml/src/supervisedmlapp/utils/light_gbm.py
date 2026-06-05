@@ -2,14 +2,22 @@
 import lightgbm as lgb
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, classification_report
 from sklearn.preprocessing import LabelEncoder
 from supervisedmlapp.configurations.conf import CHURN_FILE_PATH
-
+from sklearn.metrics import confusion_matrix
 def train_light_gbm(data_path):
     # Load the dataset
     data = pd.read_csv(data_path)
 
+    #print plan downgrade history and encoded value
+    churn_cat = data['PlanDowngradeHistory'].astype('category')
+    churn_mapping = dict(enumerate(churn_cat.cat.categories))
+    data['Churn'] = churn_cat.cat.codes
+    print("Plan Downgrade History and Encoded Value:")
+    for code, churn in churn_mapping.items():
+        print(f"{churn}: {code}")
+        
     # Encode string columns to integers so LightGBM can accept them
     string_cols = data.select_dtypes(include=['object', 'string']).columns
     for col in string_cols:
@@ -53,6 +61,14 @@ def train_light_gbm(data_path):
     # Calculate accuracy
     accuracy = accuracy_score(y_test, y_pred_binary)
     print(f'Accuracy: {accuracy:.4f}')
+    #print classification report
+    print(classification_report(y_test, y_pred_binary))
+    
+
+    cm = confusion_matrix(y_test, y_pred_binary)
+    #confusion matrix
+    print("Confusion Matrix:")
+    print(cm)
 
 if __name__ == "__main__":
     data_path = CHURN_FILE_PATH  # Update with your actual data path

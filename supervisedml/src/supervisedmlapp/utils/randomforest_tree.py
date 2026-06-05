@@ -39,7 +39,7 @@ def random_forest_tree():
     # Evaluate the model
     print("Classification Report:")
     print(classification_report(y_test, y_pred))
-    disease_cat = data['Disease'].astype('category')
+    disease_cat = data['PlanDowngradeHistory'].astype('category')
     disease_mapping = dict(enumerate(disease_cat.cat.categories))
     data['Disease'] = disease_cat.cat.codes
     print("Disease Name and Encoded Value:")
