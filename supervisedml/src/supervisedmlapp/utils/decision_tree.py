@@ -11,11 +11,10 @@ def create_decision_tree_model():
     
     # Preprocess the data (handle missing values, encode categorical variables, etc.)
     data = data.dropna()  # Drop rows with missing values for simplicity
-    data = pd.get_dummies(data)  # One-hot encode categorical variables
-    
-    # Define features and target variable
-    X = data.drop('LoanApproved', axis=1)  # Assuming 'LoanApproved' is the target variable
-    y = data['LoanApproved']
+
+    # Define features and target variable before one-hot encoding
+    y = (data['LoanApproved'] == 'Yes').astype(int)
+    X = pd.get_dummies(data.drop('LoanApproved', axis=1))  # One-hot encode features only
     
     # Split the dataset into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
