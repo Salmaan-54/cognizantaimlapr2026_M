@@ -4,7 +4,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from supervisedmlapp.configurations.conf import BANK_FILE_PATH
-
+import matplotlib.pyplot as plt
+import seaborn as sns
 # Load the dataset
 def logistic_regression_model():
     data = pd.read_csv(BANK_FILE_PATH)
@@ -27,6 +28,16 @@ def logistic_regression_model():
     accuracy = accuracy_score(y_test, y_pred)
     report = classification_report(y_test, y_pred)
     conf_matrix = confusion_matrix(y_test, y_pred)
+    #plot the graph of confusion matrix
+   
+    plt.figure(figsize=(10,7))
+    #blue and light blue color for the heatmap
+    sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues')
+    plt.xlabel('Predicted')
+    plt.ylabel('True')
+    plt.title('Confusion Matrix')
+    plt.show()
+
     
     return accuracy, report, conf_matrix
 
