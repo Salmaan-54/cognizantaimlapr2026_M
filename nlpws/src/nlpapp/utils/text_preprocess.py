@@ -3,7 +3,7 @@
 import os
 import re
 from dotenv import load_dotenv
-import nltk
+from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from bs4 import BeautifulSoup
 import requests
@@ -43,7 +43,12 @@ if __name__ == "__main__":
         cleaned_text = text[0].text.lower()
         cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()
         cleaned_text = re.sub(r'[^\w\s]', '', cleaned_text)
-        print(cleaned_text)
+        #print(cleaned_text)
+        #tokenization
+        tokens = word_tokenize(cleaned_text)
+        #count the number of tokens
+        print(f"Number of tokens: {len(tokens)}")
+
     except Exception as e:
         print(str(e))
   
