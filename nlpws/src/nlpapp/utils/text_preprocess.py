@@ -10,6 +10,8 @@ from nltk.stem import WordNetLemmatizer
 from nltk.probability import FreqDist
 from bs4 import BeautifulSoup
 from nltk.stem import PorterStemmer
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 import requests
 from sklearn.feature_extraction.text import TfidfVectorizer
   
@@ -79,7 +81,14 @@ def embeddings(tokens):
     tfidf_matrix = tfidf_vectorizer.fit_transform(tokens)
     return tfidf_matrix
 
-    
+def word_cloud(tokens):
+    text = ' '.join(tokens)
+    wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
+
+    plt.figure(figsize=(10, 5))
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis('off')
+    plt.show()
 
 if __name__ == "__main__":
     try:
@@ -102,6 +111,7 @@ if __name__ == "__main__":
         print(f"Frequency distribution: {freq_dist.most_common(10)}")
         tfidf_matrix = embeddings(tokens)
         print(f"TF-IDF matrix shape: {tfidf_matrix.shape}")
+        word_cloud(tokens)
     except Exception as e:
         print(str(e))
   
