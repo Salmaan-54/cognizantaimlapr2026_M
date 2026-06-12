@@ -32,7 +32,16 @@ def read_text_from_url(url):
 if __name__ == "__main__":
     try:
         text = read_text_from_url(scrape_url)
-        print(text[:500])  # Print the first 500 characters of the fetched text
+        #print(text[:500])  # Print the first 500 characters of the fetched text
+        #html parsing
+        soup = BeautifulSoup(text, 'html.parser')
+        #extracting the quotes
+        quotes = soup.find_all('div', class_='quote')
+        for quote in quotes:
+            text = quote.find('span', class_='text').get_text()
+            author = quote.find('small', class_='author').get_text()
+            print(f"{text} - {author}")
+
     except Exception as e:
         print(str(e))
     
