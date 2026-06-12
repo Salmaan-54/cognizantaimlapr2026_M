@@ -101,6 +101,7 @@ if __name__ == "__main__":
         text = soup.select('#content_inner > article > p')
         tokens = create_tokens(text)
         tokens = stopword_removal(tokens)
+        word_cloud(tokens)
         tokens = stemming(tokens)
         tokens = lemmatization(tokens)
         tokens = remove_most_common_tokens(tokens, n=10)
@@ -111,7 +112,7 @@ if __name__ == "__main__":
         print(f"Frequency distribution: {freq_dist.most_common(10)}")
         tfidf_matrix = embeddings(tokens)
         print(f"TF-IDF matrix shape: {tfidf_matrix.shape}")
-        word_cloud(tokens)
+        
     except Exception as e:
         print(str(e))
   
