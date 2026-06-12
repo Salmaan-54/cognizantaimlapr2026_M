@@ -11,7 +11,7 @@ from nltk.probability import FreqDist
 from bs4 import BeautifulSoup
 from nltk.stem import PorterStemmer
 import requests
-
+from sklearn.feature_extraction.text import TfidfVectorizer
   
 nltk.download("punkt")
 nltk.download("punkt_tab")
@@ -66,6 +66,20 @@ def lemmatization(tokens):
 def frequency_analysis(tokens):
     freq_dist = FreqDist(tokens)
     return freq_dist
+def remove_most_common_tokens(tokens, n=10):
+    freq_dist = FreqDist(tokens)
+    most_common_tokens = [token for token, _ in freq_dist.most_common(n)]
+    filtered_tokens = [token for token in tokens if token not in most_common_tokens]
+    return filtered_tokens
+
+def embeddings(tokens):
+    #term frequency-inverse document frequency (TF-IDF)
+    
+    tfidf_vectorizer = TfidfVectorizer()
+    tfidf_matrix = tfidf_vectorizer.fit_transform(tokens)
+    return tfidf_matrix
+
+    
 
 if __name__ == "__main__":
     try:
@@ -80,11 +94,14 @@ if __name__ == "__main__":
         tokens = stopword_removal(tokens)
         tokens = stemming(tokens)
         tokens = lemmatization(tokens)
+        tokens = remove_most_common_tokens(tokens, n=10)
         #count the number of tokens
         print(f"Number of tokens: {len(tokens)}")
         print(f"Tokens: {tokens}")
         freq_dist = frequency_analysis(tokens)
         print(f"Frequency distribution: {freq_dist.most_common(10)}")
+        tfidf_matrix = embeddings(tokens)
+        print(f"TF-IDF matrix shape: {tfidf_matrix.shape}")
     except Exception as e:
         print(str(e))
   
