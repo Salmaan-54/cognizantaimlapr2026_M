@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 from bs4 import BeautifulSoup
 from nltk.stem import PorterStemmer
 import requests
@@ -57,6 +58,11 @@ def stemming(tokens):
     stemmed_tokens = [porter_stemmer.stem(token) for token in tokens]
     return stemmed_tokens
 
+def lemmatization(tokens):
+    lemmatizer = WordNetLemmatizer()
+    lemmatized_tokens = [lemmatizer.lemmatize(token) for token in tokens]
+    return lemmatized_tokens
+
 if __name__ == "__main__":
     try:
         text = read_text_from_url(scrape_url)
@@ -69,6 +75,7 @@ if __name__ == "__main__":
         tokens = create_tokens(text)
         tokens = stopword_removal(tokens)
         tokens = stemming(tokens)
+        tokens = lemmatization(tokens)
         #count the number of tokens
         print(f"Number of tokens: {len(tokens)}")
         print(f"Tokens: {tokens}")
