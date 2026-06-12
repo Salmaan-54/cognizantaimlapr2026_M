@@ -55,7 +55,8 @@ def topic_modeling(lyrics):
 
 if __name__ == "__main__":
     try:
-        article = scrape_article(scrape_url)
-        print(article)
+        lyrics = scrape_article(scrape_url)
+        print(lyrics)
+        topic_modeling(lyrics)
     except Exception as e:
         print(f"Error: {e}")
