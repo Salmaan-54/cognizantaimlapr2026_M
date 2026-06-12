@@ -36,11 +36,12 @@ if __name__ == "__main__":
         #html parsing
         soup = BeautifulSoup(text, 'html.parser')
         #extracting the quotes
-        quotes = soup.find_all('div', class_='quote')
+        #find by xpath
+        quotes = soup.select('#content_inner > article > p')
         for quote in quotes:
-            text = quote.find('span', class_='text').get_text()
-            author = quote.find('small', class_='author').get_text()
-            print(f"{text} - {author}")
+            text = quote.get_text()
+            #author = quote.find('small', class_='author').get_text()
+            print(f"{text}")
 
     except Exception as e:
         print(str(e))
