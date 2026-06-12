@@ -1,7 +1,7 @@
 import requests
 import json
 
-url = "http://localhost:8000/v2/models/loan_model/infer"
+url = "http://51.20.84.134:8000/v2/models/loan_model/infer"
 
 payload = {
     "inputs": [
@@ -9,7 +9,7 @@ payload = {
             "name": "loan_raw_input",
             "shape": [1, 3],
             "datatype": "FP32",
-            "data": [[76513, 521, 23]]
+            "data": [[36513, 121, 23]]
         }
     ],
     "outputs": [

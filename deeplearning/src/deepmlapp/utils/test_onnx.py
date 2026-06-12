@@ -7,7 +7,7 @@ input_name = session.get_inputs()[0].name
 output_name = session.get_outputs()[0].name
 
 input_data = np.array(
-    [[46710, 452, 23]],
+    [[76710, 452, 23]],
     dtype=np.float32
 )
 
