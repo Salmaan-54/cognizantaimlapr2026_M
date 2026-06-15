@@ -39,7 +39,8 @@ dependencies = [
      "stanford-corenlp",
      "bertopic",
      "anthropic",
-     "openai"
+     "openai",
+     "google-genai"
      
     
 ]

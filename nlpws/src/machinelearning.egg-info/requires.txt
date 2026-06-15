@@ -19,6 +19,7 @@ stanford-corenlp
 bertopic
 anthropic
 openai
+google-genai
 
 [dev]
 pytest>=8.2

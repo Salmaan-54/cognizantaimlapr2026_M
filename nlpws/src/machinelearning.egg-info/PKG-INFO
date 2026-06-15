@@ -24,6 +24,7 @@ Requires-Dist: stanford-corenlp
 Requires-Dist: bertopic
 Requires-Dist: anthropic
 Requires-Dist: openai
+Requires-Dist: google-genai
 Provides-Extra: nlp
 Requires-Dist: nltk>=3.9; extra == "nlp"
 Requires-Dist: gensim>=4.3; extra == "nlp"

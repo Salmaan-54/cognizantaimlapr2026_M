@@ -2,7 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from anthropic import Anthropic, HUMAN_PROMPT, AI_PROMPT
-
+from google import genai
 env_path = os.path.join(os.path.dirname(__file__),'..', '.env')
 load_dotenv(env_path)
 
@@ -22,3 +22,14 @@ result=client.messages.create(
 
 text = "".join(b.text for b in result.content if b.type == "text")
 print(text)
+
+#use gemini llm
+gemini_api_key=os.getenv("gemini_api_key")
+client = genai.Client(api_key=gemini_api_key)
+
+response = client.models.generate_content(
+    model="gemini-2.5-flash",
+    contents="Tamil Nadu Cheif Minister?"
+)
+print("Response from Gemini LLM:")
+print(response.text)
