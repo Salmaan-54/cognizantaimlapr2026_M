@@ -22,8 +22,12 @@ def load_documents(dir_path):
             documents.extend(loader.load())
     return documents
 
-def create_chunks(documents, chunk_size=1000, chunk_overlap=0):
+def create_chunks(documents, chunk_size=1000, chunk_overlap=10):
     
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     chunks = text_splitter.split_documents(documents)
     return chunks
+
+def create_embeddings(chunks, embedding_model):
+    embeddings = embedding_model.embed_documents([chunk.page_content for chunk in chunks])
+    return embeddings
