@@ -25,7 +25,7 @@ def load_data_from_vector_db():
     )
     return retriever
 
-def delivery_query(prompt,retriever):
+def load_llm(retriever):
     #define open ai llm
     llm = ChatOpenAI(
         model="gpt-4o-mini",
@@ -40,3 +40,17 @@ def delivery_query(prompt,retriever):
     )
 
     return rag_chain
+
+def prompt_query(question:str):
+    #read the prompt
+    retriever = load_data_from_vector_db()
+    ragchain= load_llm(retriever)
+    answer= ragchain.invoke({
+        "query": question
+    })
+    return {
+        "answer": answer,
+        "sources": [
+            doc.metadata for doc in answer["source_documents"]
+        ]
+    }
