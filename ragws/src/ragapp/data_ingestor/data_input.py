@@ -50,3 +50,7 @@ if __name__ == "__main__":
 
     embeddings = create_embeddings(chunks, embedding_model)
     store_vector_store(chunks, embeddings, vector_store)
+    vector_store.persist()
+    #check data stored
+    print("Data stored successfully in Chroma vector store.")
+    
