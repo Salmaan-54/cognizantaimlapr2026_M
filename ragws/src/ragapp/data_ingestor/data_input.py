@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     #chroma store
-    persist_directory="src/ragapp/vectordatabase"    
+    persist_directory = os.getenv('persist_directory')   
 
     embeddings = create_embeddings(chunks, embedding_model)
     vector_store = Chroma.from_documents(chunks, embedding_model, persist_directory=persist_directory)  
