@@ -7,6 +7,11 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
    # Assuming you have an embedding model and vector store initialized
 from langchain_classic.embeddings import OpenAIEmbeddings
 from langchain_classic.vectorstores import Chroma
+import warnings
+warnings.filterwarnings(
+    "ignore",
+    category=DeprecationWarning
+)
 env_path = os.path.join(os.path.dirname(__file__),'..', '.env')
 load_dotenv(env_path)
 
