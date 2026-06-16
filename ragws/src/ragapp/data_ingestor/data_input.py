@@ -31,3 +31,6 @@ def create_chunks(documents, chunk_size=1000, chunk_overlap=10):
 def create_embeddings(chunks, embedding_model):
     embeddings = embedding_model.embed_documents([chunk.page_content for chunk in chunks])
     return embeddings
+
+def store_vector_store(chunks, embeddings, vector_store):
+    vector_store.add_documents(chunks, embeddings)
