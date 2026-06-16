@@ -2,7 +2,11 @@
 import os
 from dotenv import load_dotenv
 from langchain_classic.document_loaders import Docx2txtLoader, TextLoader,PyPDFLoader
+from langchain_community.embeddings import HuggingFaceEmbeddings, OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+   # Assuming you have an embedding model and vector store initialized
+from langchain_classic.embeddings import OpenAIEmbeddings
+from langchain_classic.vectorstores import Chroma
 env_path = os.path.join(os.path.dirname(__file__),'..', '.env')
 load_dotenv(env_path)
 
@@ -34,3 +38,15 @@ def create_embeddings(chunks, embedding_model):
 
 def store_vector_store(chunks, embeddings, vector_store):
     vector_store.add_documents(chunks, embeddings)
+
+if __name__ == "__main__":
+    data_dir = os.getenv('data_dir')
+    documents = load_documents(data_dir)
+    chunks = create_chunks(documents)   
+
+    embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    #chroma store
+    vector_store = Chroma(persist_directory="src/ragapp/data", embedding_function=embedding_model)  
+
+    embeddings = create_embeddings(chunks, embedding_model)
+    store_vector_store(chunks, embeddings, vector_store)
