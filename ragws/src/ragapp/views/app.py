@@ -52,6 +52,28 @@ st.markdown(
         font-weight: bold;
         text-align: center;
     }
+    .stWelcome{
+       color: blue;
+       font-size: 48px;
+       font-weight: bold;
+       text-align: center;
+    }
+     .stAnswer{
+        background: radial-gradient(circle, lightgreen, darkgreen);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+    }
+     .stQuestion{
+        background: radial-gradient(circle, lightcoral, darkred);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -60,10 +82,12 @@ st.markdown(
 
 #add title and description
 st.markdown('<h1 class="stTitle">Food Delivery Policy Assistant</h1>', unsafe_allow_html=True)
-st.write(
+#Welcome message with h2 tag and center aligned
+st.markdown(
     """
-    Ask any question related to our Food Delivery Policy, and I'll provide you with the information you need.
-    """
+    <h2 class="stWelcome">Welcome to the Food Delivery Policy Assistant!</h2>
+    """,
+    unsafe_allow_html=True
 )
 #add input box for user to ask question
 user_question = st.text_input("Enter your question about the Food Delivery Policy:")
