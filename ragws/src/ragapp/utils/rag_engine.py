@@ -31,12 +31,36 @@ def load_llm(retriever):
         model="gpt-4o-mini",
         temperature=0
     )
+
+    prompt = PromptTemplate(
+    input_variables=["context", "question"],
+    template="""
+    You are a Food Delivery Support Assistant.
+
+    Answer only from the Food Delivery Policy.
+
+    Rules:
+    - Use only the provided context.
+    - Keep answer under 2 sentences.
+    - Return only the final answer.
+    - If not found say:
+    "Information not found in Food Delivery Policy."
+
+    Context:
+    {context}
+
+    Question:
+    {question}
+
+    Answer:
+    """
+    )
     rag_chain = RetrievalQA.from_chain_type(
         llm=llm,
         retriever=retriever,
-        return_source_documents=True,
+        return_source_documents=False,
         chain_type="stuff",
-        #chain_type_kwargs={"prompt": prompt_template}
+        chain_type_kwargs={"prompt": prompt}
     )
 
     return rag_chain
@@ -49,8 +73,8 @@ def receive_prompt(question:str):
         "query": question
     })
     return {
-        "answer": answer,
-        "sources": [
-            doc.metadata for doc in answer["source_documents"]
-        ]
+        "answer": answer['result']
+        
+       
     }
+#"source_documents": answer['source_documents']
