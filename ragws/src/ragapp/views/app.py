@@ -83,7 +83,7 @@ div[data-testid="stButton"] button {
     color: white;
     border-radius: 12px;
     height: 55px;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
     border: none;
 }
@@ -91,6 +91,8 @@ div[data-testid="stButton"] button {
 div[data-testid="stButton"] button:hover {
     background-color: #002bcc;
     color: white;
+    font-size: 24px;
+    font-weight: bold;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -120,7 +122,7 @@ with center:
 
     # Center button below textbox
     b_left, b_center, b_right = st.columns([2, 1, 2])
-
+    #apply css styling to the button
     with b_center:
         ask_clicked = st.button("Ask", use_container_width=True)
 
