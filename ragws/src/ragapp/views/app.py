@@ -137,19 +137,10 @@ st.markdown(
 
 #read text box content and send it rag engine when button is clicked
 #use java script to read the text box content and send it to python function
-st.markdown(
-    """
-    <script>
-    const submitButton = document.getElementById('submit_button');
-    submitButton.addEventListener('click', () => {
-        const questionInput = document.getElementById('question_input');
-        const question = questionInput.value;
-        if (question) {
-            // Send the question to Streamlit
-            alert("Question submitted: " + question);
-        }
-    });
-    </script>
-    """,
-    unsafe_allow_html=True
-)
+if st.button("submit_button"):
+   
+    question = st.text_input("question_input")
+    #send question to rag engine and get answer
+    if question:
+        answer = receive_prompt(question)
+        st.success(answer)
