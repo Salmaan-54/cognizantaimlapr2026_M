@@ -19,8 +19,8 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    .main {
-        background: radial-gradient(circle, lightblue, blue, darkblue);
+    .stApp {
+        background: radial-gradient(circle, lightblue, lightgreen, lightyellow, lightpink, lightcoral);
     }
     
     .stTitle{
