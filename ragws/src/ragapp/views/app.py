@@ -1,6 +1,8 @@
 #create ui page using streamlit for food delivery policy
 import streamlit as st
 from ragapp.utils.rag_engine import receive_prompt
+#to run 
+# streamlit run src\ragapp\views\app.py
 
 #design the ui page layout
 st.set_page_config(
@@ -34,4 +36,3 @@ if user_question:
         answer = receive_prompt(user_question)
     st.markdown(f"**Answer:** {answer}")
     st.balloons()
-    
