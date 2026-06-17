@@ -1,146 +1,164 @@
-#create ui page using streamlit for food delivery policy
 import streamlit as st
-from ragapp.utils.rag_engine import receive_prompt
-#to run 
-# streamlit run src/ragapp/views/app.py
+#from ragapp.utils.rag_engine import receive_prompt
+import requests
+import os
+from dotenv import load_dotenv
+env_path=os.path.join(os.path.dirname(__file__), '..','/.env')
+load_dotenv(env_path)
+API_URL = os.getenv("api_url")
 
-#design the ui page layout
 st.set_page_config(
-    page_title="Food Delivery Policy Assistant",    
+    page_title="Food Delivery Policy Assistant",
     page_icon="🍔",
     layout="wide",
-    
 )
 
-#set css style for the page
-#title color should be radial gradient from red to orange
-#background color for the page multicolor radial gradient from light blue to dark blue
-#apply main page css class to the whole page
-#center the text box with rounded corners and light background color
+st.markdown("""
+<style>
+[data-testid="stHeader"] {
+    background: transparent;
+    height: 0rem;
+}
+
+[data-testid="stToolbar"] {
+    display: none;
+}
+
+.stApp {
+    background: linear-gradient(
+        120deg,
+        #ff9a9e 0%,
+        #fad0c4 25%,
+        #a8e6a1 60%,
+        #dcedc1 100%
+    );
+    min-height: 100vh;
+}
+
+.block-container {
+    padding-top: 1rem;
+}
+
+.stTitle {
+    background: radial-gradient(circle, blue, red, orange, yellow, green);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.stWelcome {
+    background: radial-gradient(circle, lightblue, darkblue);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 46px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.answer-box {
+    width: 75%;
+    margin: 20px auto;
+    background: rgba(255,255,255,0.9);
+    padding: 25px;
+    border-radius: 20px;
+    font-size: 22px;
+    line-height: 1.8;
+    color: #1f2937;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    text-align: left;
+}
+
+div[data-testid="stTextInput"] input {
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 16px;
+    height: 55px;
+}
+
+/* Button styling only */
+div[data-testid="stButton"] button {
+    background-color: #003cff;
+    color: white;
+    border-radius: 12px;
+    height: 55px;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+}
+
+div[data-testid="stButton"] button:hover {
+    background-color: #002bcc;
+    color: white;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.markdown(
-    """
-    <style>
-    /* Remove Streamlit top white header */
-    [data-testid="stHeader"] {
-        background: transparent;
-        height: 0rem;
-    }
-
-    /* Hide toolbar/deploy/menu */
-    [data-testid="stToolbar"] {
-        display: none;
-    }
-
-    /* Full page background */
-    .stApp {
-        background: linear-gradient(
-            120deg,
-            #ff9a9e 0%,
-            #fad0c4 25%,
-            #a8e6a1 60%,
-            #dcedc1 100%
-        );
-        min-height: 100vh;
-    }
-
-    /* Remove top spacing */
-    .block-container {
-        padding-top: 1rem;
-    }
-    
-    .stTitle{
-        background: radial-gradient(circle, blue, red, orange, yellow, green);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 48px;
-        font-weight: bold;
-        text-align: center;
-    }
-    .stWelcome{
-       color: blue;
-       background: radial-gradient(circle, lightblue, darkblue);
-       -webkit-background-clip: text;
-       -webkit-text-fill-color: transparent;
-       font-size: 48px;
-       font-weight: bold;
-       text-align: center;
-    }
-     .stAnswer{
-        background: radial-gradient(circle, lightgreen, darkgreen);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 20px;
-        font-weight: bold;
-        text-align: center;
-    }
-     .stQuestion{
-        background: radial-gradient(circle, lightcoral, darkred);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 20px;
-        font-weight: bold;
-        text-align: center;
-    }
-    .stTextBox{
-         display: block;
-         margin: 20px auto 0;
-         border-radius: 20px;
-         background: rgba(255, 255, 255, 0.8);
-         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .stButton{
-        display: block;
-        margin: 20px auto 0;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 5px;
-        background-color: blue;
-        color: white;
-        border: none;
-        cursor: pointer;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-#apply main page css class to the whole page
-
-#add title and description
-st.markdown('<h1 class="stTitle">Food Delivery Policy Assistant</h1>', unsafe_allow_html=True)
-#Welcome message with h2 tag and center aligned
-st.markdown(
-    """
-    <h2 class="stWelcome">Welcome to the Food Delivery Policy Assistant!</h2>
-    """,
+    '<h1 class="stTitle">Food Delivery Policy Assistant</h1>',
     unsafe_allow_html=True
 )
 
-
-#create input text box for user question
 st.markdown(
-    """
-    <input class="stTextBox" type="text" id="question_input" placeholder="Ask a question about the Food Delivery Policy..." style="width: 50%; padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;">
-   
-    """,
+    '<h2 class="stWelcome">Welcome to the Food Delivery Policy Assistant!</h2>',
     unsafe_allow_html=True
 )
 
-#add a button to submit the question
-st.markdown(
-    """
-    <button class="stButton" id="submit_button">
-    Ask
-    </button>
-    """,
-    unsafe_allow_html=True
-)
+st.markdown("<br>", unsafe_allow_html=True)
 
-#read text box content and send it rag engine when button is clicked
-#use java script to read the text box content and send it to python function
-if st.button("submit_button"):
-   
-    question = st.text_input("question_input")
-    #send question to rag engine and get answer
-    if question:
-        answer = receive_prompt(question)
-        st.success(answer)
+# Center textbox and button together
+left, center, right = st.columns([2, 5, 2])
+
+with center:
+    question = st.text_input(
+        label="Food delivery policy question",
+        placeholder="Ask a question about the Food Delivery Policy...",
+        key="question_input",
+        label_visibility="collapsed"
+    )
+
+    # Center button below textbox
+    b_left, b_center, b_right = st.columns([2, 1, 2])
+
+    with b_center:
+        ask_clicked = st.button("Ask", use_container_width=True)
+
+if ask_clicked:
+    if question.strip() == "":
+        st.warning("Please enter a question")
+    else:
+        with st.spinner("Searching food delivery policy..."):
+            response = requests.post(
+                API_URL,
+                json={"prompt": question}
+            )
+
+        if response.status_code == 200:
+            result = response.json()
+
+            if isinstance(result, dict):
+                answer = result.get("answer", "")
+            else:
+                answer = str(result)
+
+            st.markdown(
+                """
+                <h2 style='text-align:center;color:#15803d;'>
+                    ✅ Answer
+                </h2>
+                """,
+                unsafe_allow_html=True
+            )
+
+            st.markdown(
+                f"""
+                <div class="answer-box">
+                    {answer}
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+        else:
+            st.error(f"API Error: {response.status_code}")
+            st.write(response.text)
