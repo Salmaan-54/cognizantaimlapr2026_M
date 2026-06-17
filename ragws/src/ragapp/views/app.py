@@ -2,7 +2,7 @@
 import streamlit as st
 from ragapp.utils.rag_engine import receive_prompt
 #to run 
-# streamlit run src\ragapp\views\app.py
+# streamlit run src/ragapp/views/app.py
 
 #design the ui page layout
 st.set_page_config(
@@ -12,18 +12,25 @@ st.set_page_config(
 )
 
 #set css style for the page
+#title color should be radial gradient from red to orange
 st.markdown(
     """
     <style>
     .main {
         background-color: #f0f0f0;
     }
+    
+    .stTitle{
+        background: radial-gradient(circle, skyblue, navyblue);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
     </style>
     """,
     unsafe_allow_html=True
 )
 #add title and description
-st.title("Food Delivery Policy Assistant")
+st.markdown('<h1 class="stTitle">Food Delivery Policy Assistant</h1>', unsafe_allow_html=True)
 st.write(
     """
     Ask any question related to our Food Delivery Policy, and I'll provide you with the information you need.
