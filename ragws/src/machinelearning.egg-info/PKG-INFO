@@ -56,6 +56,8 @@ Requires-Dist: torchvision
 Requires-Dist: sentence-transformers
 Requires-Dist: better-profanity
 Requires-Dist: azure.identity
+Requires-Dist: langchain-openai
+Requires-Dist: langgraph
 Provides-Extra: nlp
 Requires-Dist: nltk>=3.9; extra == "nlp"
 Requires-Dist: gensim>=4.3; extra == "nlp"

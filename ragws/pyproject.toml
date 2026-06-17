@@ -2,7 +2,7 @@
 name = "machinelearning"
 version = "0.1.0"
 description = "Supervised and unsupervised ML algorithm practice"
-requires-python = ">=3.10"
+requires-python = "3.13"
 dependencies = [
     # Core scientific stack
     "numpy>=1.26",
@@ -70,7 +70,9 @@ dependencies = [
      "torchvision",
      "sentence-transformers",
      "better-profanity",
-     "azure.identity"
+     "azure.identity",
+     "langchain-openai",
+      "langgraph"
      
     
 ]

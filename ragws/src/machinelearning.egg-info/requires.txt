@@ -51,6 +51,8 @@ torchvision
 sentence-transformers
 better-profanity
 azure.identity
+langchain-openai
+langgraph
 
 [dev]
 pytest>=8.2
