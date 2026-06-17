@@ -54,6 +54,9 @@ st.markdown(
     }
     .stWelcome{
        color: blue;
+       background: radial-gradient(circle, lightblue, darkblue);
+       -webkit-background-clip: text;
+       -webkit-text-fill-color: transparent;
        font-size: 48px;
        font-weight: bold;
        text-align: center;
@@ -89,10 +92,15 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-#add input box for user to ask question
-user_question = st.text_input("Enter your question about the Food Delivery Policy:")
-if user_question:
-    with st.spinner("Fetching answer..."):
-        answer = receive_prompt(user_question)
-    st.markdown(f"**Answer:** {answer}")
-    st.balloons()
+
+
+#create input text box for user question
+st.markdown(
+    """
+    <div style="display: flex; justify-content: center; margin-top: 20px;">
+        <input type="text" id="question_input" placeholder="Ask a question about the Food Delivery Policy..." style="width: 50%; padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;">
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
