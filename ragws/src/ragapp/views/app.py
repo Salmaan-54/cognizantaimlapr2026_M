@@ -8,27 +8,35 @@ from ragapp.utils.rag_engine import receive_prompt
 st.set_page_config(
     page_title="Food Delivery Policy Assistant",    
     page_icon="🍔",
-    layout="wide"
+    layout="wide",
+    
 )
 
 #set css style for the page
 #title color should be radial gradient from red to orange
+#background color for the page multicolor radial gradient from light blue to dark blue
+#apply main page css class to the whole page
 st.markdown(
     """
     <style>
     .main {
-        background-color: #f0f0f0;
+        background: radial-gradient(circle, lightblue, blue, darkblue);
     }
     
     .stTitle{
-        background: radial-gradient(circle, skyblue, navyblue);
+        background: radial-gradient(circle, blue, red, orange, yellow, green);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+        font-size: 48px;
+        font-weight: bold;
+        text-align: center;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
+#apply main page css class to the whole page
+
 #add title and description
 st.markdown('<h1 class="stTitle">Food Delivery Policy Assistant</h1>', unsafe_allow_html=True)
 st.write(
