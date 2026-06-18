@@ -1,5 +1,4 @@
 from urllib import response
-
 from langchain_core import env
 from langchain_openai import ChatOpenAI, data
 from langchain_classic.agents import initialize_agent, Tool, AgentType
@@ -14,6 +13,7 @@ load_dotenv(env_path)
 API_URL = os.getenv("api_url")
 ORDER_API_URL = os.getenv("order_api_url")
 LATEST_ORDER_API_URL = os.getenv("latest_order_api_url")
+TOMTOM_API_KEY = os.getenv("MAP_KEY")
 
 
 EMAIL_USER = os.getenv("EMAIL_USER")
@@ -236,6 +236,92 @@ def email_order_confirmation(customer_data) -> str:
 
     except Exception as e:
         return f"❌ Failed to send email: {str(e)}"
+    
+
+
+def extract_search_text(location: str) -> str:
+    text = location.strip()
+
+    text = re.sub(r"dental clinics near\s+", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"dental clinics in\s+", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"dentists near\s+", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"dentists in\s+", "", text, flags=re.IGNORECASE)
+
+    return text.strip()
+
+
+def delivery_place_search(location: str) -> str:
+    try:
+        if not TOMTOM_API_KEY:
+            return "TomTom API key missing. Please add TOMTOM_API_KEY in .env."
+
+        city = extract_search_text(location)
+
+        if not city:
+            return "Please provide a city. Example: dental clinics near Chennai"
+
+        search_query = f"dental clinic {city}"
+
+        url = (
+            "https://api.tomtom.com/search/2/search/"
+            f"{search_query}.json"
+        )
+
+        params = {
+            "key": TOMTOM_API_KEY,
+            "limit": 10,
+            "countrySet": "IN",
+            "typeahead": "false",
+            "language": "en-US"
+        }
+
+        response = requests.get(url, params=params, timeout=20)
+        response.raise_for_status()
+
+        data = response.json()
+        results = data.get("results", [])
+
+        if not results:
+            return f"No dental clinics found near {city}."
+
+        output = f"✅ Dental clinics found near {city}:\n\n"
+
+        for item in results:
+            poi = item.get("poi", {})
+            address = item.get("address", {})
+            position = item.get("position", {})
+
+            name = poi.get("name", "Unnamed dental clinic")
+            phone = poi.get("phone", "Not available")
+            category = ", ".join(poi.get("categories", []))
+
+            freeform_address = address.get("freeformAddress", "Address not available")
+            lat = position.get("lat")
+            lon = position.get("lon")
+
+            output += f"""
+                Name: {name}
+                Address: {freeform_address}
+                Phone: {phone}
+                Category: {category}
+                Latitude: {lat}
+                Longitude: {lon}
+                ---
+                """
+
+        return output
+
+    except requests.exceptions.HTTPError as e:
+        return f"TomTom API HTTP error: {str(e)}"
+
+    except requests.exceptions.Timeout:
+        return "TomTom API timeout. Please try again."
+
+    except Exception as e:
+        return f"TomTom place search failed: {str(e)}"
+
+
+        
 
 
 
@@ -260,10 +346,10 @@ tools = [
             ),
 
         Tool(
-        name="EmailLatestOrder",
-        func=email_latest_order,
+        name="EmailOrderConfirmation",
+        func=email_order_confirmation,
         description="""
-        Use this tool to send order confirmation emails for the latest order.
+        Use this tool to send order confirmation emails.
 
         Input format:
         customer_name,product_id,product_name,quantity,price,customer_email,
@@ -271,7 +357,20 @@ tools = [
         Example:
         Parameswari,123,TV,1,50000,example@example.com
         """
-            )
+            ),
+
+        Tool(
+            name="TomTomPlaceSearch",
+    func=delivery_place_search,
+    description="""
+        Search dental clinics or nearby places using TomTom Maps API.
+
+        Input examples:
+        dental clinics near Chennai
+        dental clinics in Kochi
+        dentists near Trivandrum
+        """
+        )
         ]
 
 
