@@ -3,6 +3,10 @@ import streamlit as st
 import requests
 import os
 from dotenv import load_dotenv
+from ragapp.agents.delivery_support_agent import ask_food_delivery_agent
+#to run this app,
+#streamlit run src/ragapp/views/app.py
+#Create an order for Parameswari, product id 128, product name TV, Quantity 1, Price 50000
 env_path=os.path.join(os.path.dirname(__file__), '..','.env')
 load_dotenv(env_path)
 API_URL = os.getenv("api_url")
@@ -114,8 +118,8 @@ left, center, right = st.columns([2, 5, 2])
 
 with center:
     question = st.text_input(
-        label="Food delivery policy question",
-        placeholder="Ask a question about the Food Delivery Policy...",
+        label="Food delivery Agent - Ask a question about the Food Delivery Policy, Placing an Order",
+        placeholder="Ask a question about the Food Delivery Policy or place an order...",
         key="question_input",
         label_visibility="collapsed"
     )
@@ -130,19 +134,13 @@ if ask_clicked:
     if question.strip() == "":
         st.warning("Please enter a question")
     else:
-        with st.spinner("Searching food delivery policy..."):
-            response = requests.post(
-                API_URL,
-                json={"prompt": question}
-            )
+        with st.spinner("Calling Food Delivery Agent..."):
+            response = ask_food_delivery_agent(question)
 
-        if response.status_code == 200:
-            result = response.json()
-
-            if isinstance(result, dict):
-                answer = result.get("answer", "")
+            if isinstance(response, dict):
+                answer = response.get("answer", "")
             else:
-                answer = str(result)
+                answer = str(response)
 
             st.markdown(
                 """
@@ -161,6 +159,4 @@ if ask_clicked:
                 """,
                 unsafe_allow_html=True
             )
-        else:
-            st.error(f"API Error: {response.status_code}")
-            st.write(response.text)
+        
