@@ -110,7 +110,48 @@ def get_all_orders():
 
     return [dict(row) for row in rows]
 
+@app.get("/orders/latest-order")
+def get_latest_order():
+    conn = get_db()
+    cursor = conn.cursor()
 
+    cursor.execute("""
+        SELECT 
+            id,
+            customer_name,
+            customer_email,
+            product_id,
+            product_name,
+            quantity,
+            price,
+            total_amount,
+            status,
+            payment_status,
+            created_at
+        FROM orders
+        ORDER BY id DESC
+        LIMIT 1
+    """)
+
+    row = cursor.fetchone()
+    conn.close()
+
+    if not row:
+        return {"error": "No orders found"}
+
+    return {
+        "id": row[0],
+        "customer_name": row[1],
+        "customer_email": row[2],
+        "product_id": row[3],
+        "product_name": row[4],
+        "quantity": row[5],
+        "price": row[6],
+        "total_amount": row[7],
+        "status": row[8],
+        "payment_status": row[9],
+        "created_at": row[10]
+    }
 @app.get("/orders/{order_id}")
 def get_order(order_id: int):
     conn = get_db()
@@ -199,45 +240,3 @@ def delete_order(order_id: int):
 
     return {"message": "Order deleted", "order_id": order_id}
 
-@app.get("/orders/latest")
-def get_latest_order():
-    conn = get_db()
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        SELECT 
-            id,
-            customer_name,
-            customer_email,
-            product_id,
-            product_name,
-            quantity,
-            price,
-            total_amount,
-            status,
-            payment_status,
-            created_at
-        FROM orders
-        ORDER BY id DESC
-        LIMIT 1
-    """)
-
-    row = cursor.fetchone()
-    conn.close()
-
-    if not row:
-        return {"error": "No orders found"}
-
-    return {
-        "id": row[0],
-        "customer_name": row[1],
-        "customer_email": row[2],
-        "product_id": row[3],
-        "product_name": row[4],
-        "quantity": row[5],
-        "price": row[6],
-        "total_amount": row[7],
-        "status": row[8],
-        "payment_status": row[9],
-        "created_at": row[10]
-    }
