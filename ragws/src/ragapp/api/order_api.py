@@ -117,17 +117,16 @@ def get_latest_order():
 
     cursor.execute("""
         SELECT 
-            id,
-            customer_name,
-            customer_email,
-            product_id,
-            product_name,
-            quantity,
-            price,
-            total_amount,
-            status,
-            payment_status,
-            created_at
+           
+       customer_name,
+        product_id,
+        product_name,
+        quantity,
+        price,
+        total_amount,
+        status,
+        payment_status,
+        created_at
         FROM orders
         ORDER BY id DESC
         LIMIT 1

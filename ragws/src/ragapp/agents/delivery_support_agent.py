@@ -13,6 +13,7 @@ env_path = os.path.join(os.path.dirname(__file__), "..",".env")
 load_dotenv(env_path)
 API_URL = os.getenv("api_url")
 ORDER_API_URL = os.getenv("order_api_url")
+LATEST_ORDER_API_URL = os.getenv("latest_order_api_url")
 
 
 EMAIL_USER = os.getenv("EMAIL_USER")
@@ -112,7 +113,61 @@ def save_order_to_db_tool(order_details: str) -> str:
 
     except Exception as e:
         return f"Unexpected error: {str(e)}"
+def email_latest_order(_: str = "") -> str:
+    try:
+        # 1. Read latest order
+        response = requests.get(LATEST_ORDER_API_URL)
+        response.raise_for_status()
 
+        order = response.json()
+
+        if order.get("error"):
+            return "No latest order found."
+
+        # 2. Validate email
+        customer_email = order.get("customer_email")
+
+        if not customer_email:
+            return "Customer email missing in latest order."
+
+        # 3. Build email
+        subject = "Order Confirmation"
+
+        body = f"""
+Dear {order.get("customer_name")},
+
+Your latest order has been successfully placed.
+
+Order Details:
+Order ID: {order.get("id")}
+Product ID: {order.get("product_id")}
+Product Name: {order.get("product_name")}
+Quantity: {order.get("quantity")}
+Price: {order.get("price")}
+
+
+Regards,
+Food Delivery Support Team
+"""
+
+        message = f"Subject: {subject}\n\n{body}"
+
+        # 4. Send email
+        with smtplib.SMTP_SSL("smtp.zoho.in", 465) as server:
+            server.login(EMAIL_USER, EMAIL_PASSWORD)
+            server.sendmail(
+                EMAIL_USER,
+                customer_email,
+                message
+            )
+
+        return f"✅ Email sent to {customer_email} for latest order ID {order.get('id')}"
+
+    except requests.exceptions.RequestException as e:
+        return f"Order API error: {str(e)}"
+
+    except Exception as e:
+        return f"Email sending failed: {str(e)}"
 def email_order_confirmation(customer_data) -> str:
 
     try:
@@ -205,10 +260,10 @@ tools = [
             ),
 
         Tool(
-        name="EmailOrderConfirmation",
-        func=email_order_confirmation,
+        name="EmailLatestOrder",
+        func=email_latest_order,
         description="""
-        Use this tool to send order confirmation emails to customers.
+        Use this tool to send order confirmation emails for the latest order.
 
         Input format:
         customer_name,product_id,product_name,quantity,price,customer_email,
