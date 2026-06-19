@@ -72,7 +72,8 @@ dependencies = [
      "better-profanity",
      "azure.identity",
      "langchain-openai",
-      "langgraph"
+      "langgraph",
+      "gTTS"
      
     
 ]

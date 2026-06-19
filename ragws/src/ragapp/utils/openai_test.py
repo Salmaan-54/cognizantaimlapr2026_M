@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 env_path = os.path.join(os.path.dirname(__file__),'..', ".env")
 load_dotenv(env_path)
-deployment_name = "gpt-4.1"
+deployment_name = "gpt-4.1-mini"
 token_provider = get_bearer_token_provider(DefaultAzureCredential(), "https://ai.azure.com/.default")
 
 client = OpenAI(

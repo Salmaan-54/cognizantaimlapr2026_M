@@ -53,6 +53,7 @@ better-profanity
 azure.identity
 langchain-openai
 langgraph
+gTTS
 
 [dev]
 pytest>=8.2

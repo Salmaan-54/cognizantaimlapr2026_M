@@ -5,7 +5,7 @@ src/machinelearning.egg-info/dependency_links.txt
 src/machinelearning.egg-info/requires.txt
 src/machinelearning.egg-info/top_level.txt
 src/ragapp/__init__.py
-src/ragapp/agents/customer_support_agent.py
+src/ragapp/agents/delivery_support_agent.py
 src/ragapp/api/__init__.py
 src/ragapp/api/order_api.py
 src/ragapp/api/prompt_api.py
@@ -18,6 +18,8 @@ src/ragapp/filters/safety_filter.py
 src/ragapp/tools/__init__.py
 src/ragapp/tools/order_tool.py
 src/ragapp/utils/__init__.py
+src/ragapp/utils/multi_modal_test.py
+src/ragapp/utils/openai_test.py
 src/ragapp/utils/rag_engine.py
 src/ragapp/vectordatabase/__init__.py
 src/ragapp/views/__init__.py
